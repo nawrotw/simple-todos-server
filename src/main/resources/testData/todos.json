@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "text":  "Buy some water"
+  },
+  {
+    "id": 2,
+    "checked": true,
+    "text": "Clean a bike"
+  },
+  {
+    "id": 3,
+    "checked": false,
+    "text": "Wax a chain"
+  }
+]

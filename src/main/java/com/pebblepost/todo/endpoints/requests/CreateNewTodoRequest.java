@@ -2,13 +2,13 @@ package com.pebblepost.todo.endpoints.requests;
 
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 public class CreateNewTodoRequest {
-    @NotNull
+    @NotBlank
     private String text;
 
-    // optional parameter
+    // optional
     private Boolean checked;
 }

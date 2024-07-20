@@ -7,6 +7,7 @@ import com.pebblepost.todo.endpoints.requests.UpdateTextRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class TodoEndpoints {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody CreateNewTodoRequest request) {
+    public void create(@Valid @RequestBody CreateNewTodoRequest request) {
         boolean checked = Optional.ofNullable(request.getChecked()).isPresent() ? request.getChecked() : false;
         todoService.createTodo(request.getText(), checked);
     }
@@ -34,13 +35,17 @@ public class TodoEndpoints {
 
     @PutMapping("/{id}/checked")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateChecked(@PathVariable("id") Long id, @RequestBody UpdateCheckedRequest request) {
+    public void updateChecked(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody UpdateCheckedRequest request) {
         todoService.updateChecked(id, request.isChecked());
     }
 
     @PutMapping("/{id}/text")
     @ResponseStatus(value = HttpStatus.OK)
-    public void updateText(@PathVariable("id") Long id, @RequestBody UpdateTextRequest request) {
+    public void updateText(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody UpdateTextRequest request) {
         todoService.updateText(id, request.getText());
     }
 

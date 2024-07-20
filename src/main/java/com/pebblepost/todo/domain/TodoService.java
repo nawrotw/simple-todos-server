@@ -1,5 +1,6 @@
 package com.pebblepost.todo.domain;
 
+import com.pebblepost.todo.exceptions.ResponseNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,18 +25,22 @@ public class TodoService {
 
     @Transactional
     public void deleteTodo(Long id) {
-        todoRepository.findById(id).ifPresent(todoRepository::delete);
+        todoRepository.deleteById(id);
     }
 
     @Transactional
     public void updateChecked(Long id, boolean checked) {
-        // throw for 404??
-//        throw new UnsupportedOperationException("Not supported yet.");
-        todoRepository.findById(id).ifPresent(todo -> todo.setChecked(checked));
+        getTodoById(id).setChecked(checked);
     }
 
     @Transactional
     public void updateText(Long id, String text) {
-        todoRepository.findById(id).ifPresent(todo -> todo.setText(text));
+        getTodoById(id).setText(text);
+    }
+
+    private Todo getTodoById(Long id) {
+        return todoRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResponseNotFoundException("Todo { id: '" + id + "' } not found"));
     }
 }

@@ -38,6 +38,11 @@ public class TodoService {
         getTodoById(id).setText(text);
     }
 
+    @Transactional
+    public void clearCompleted() {
+        todoRepository.findAll().forEach(todo -> todo.setChecked(false));
+    }
+
     private Todo getTodoById(Long id) {
         return todoRepository.findById(id)
                 .orElseThrow(() ->

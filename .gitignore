@@ -2,3 +2,6 @@
 build
 .idea
 out
+
+# Enviroment config
+application-dev.properties

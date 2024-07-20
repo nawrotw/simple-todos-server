@@ -22,6 +22,11 @@ public class TodoEndpoints {
         this.todoService = todoService;
     }
 
+    @GetMapping
+    public List<TodoDto> getAll() {
+        return TodoDto.fromEntities(todoService.getTodos());
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void create(@Valid @RequestBody CreateNewTodoRequest request) {
@@ -29,9 +34,10 @@ public class TodoEndpoints {
         todoService.createTodo(request.getText(), checked);
     }
 
-    @GetMapping
-    public List<TodoDto> getAll() {
-        return TodoDto.fromEntities(todoService.getTodos());
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void delete(@PathVariable("id") Long id) {
+        todoService.deleteTodo(id);
     }
 
     @PutMapping("/{id}/checked")
@@ -50,9 +56,9 @@ public class TodoEndpoints {
         todoService.updateText(id, request.getText());
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PutMapping("/clear-completed")
     @ResponseStatus(value = HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) {
-        todoService.deleteTodo(id);
+    public void clearCompleted() {
+        todoService.clearCompleted();
     }
 }

@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+//@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -73,15 +74,30 @@ class TodoEndpointsTest {
 
         repo.saveAll(newTodos);
 
-        List<Todo> todos = repo.findAll();
-        assertThat(todos).isEqualTo(newTodos);
-
-
         this.mockMvc.perform(get("/api/todos"))
-//                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(readJson(todosResponseJson)));
+    }
 
+    @Test
+    void clearCompleted() throws Exception {
+        List<Todo> newTodos = List.of(
+                new Todo("Buy some water", false),
+                new Todo("Clean a bike", true),
+                new Todo("Wax a chain", true)
+        );
+
+        repo.saveAll(newTodos);
+
+        this.mockMvc.perform(put("/api/todos/clear-completed"))
+                .andExpect(status().isOk());
+
+        List<Todo> todos = repo.findAll();
+        assertThat(todos).isEqualTo(List.of(
+                new Todo(1L, 0, "Buy some water", false),
+                new Todo(2L, 1, "Clean a bike", false),
+                new Todo(3L, 1, "Wax a chain", false)
+        ));
     }
 
     @Test

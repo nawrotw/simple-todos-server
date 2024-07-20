@@ -4,6 +4,7 @@ import com.pebblepost.todo.domain.TodoService;
 import com.pebblepost.todo.endpoints.requests.CreateNewTodoRequest;
 import com.pebblepost.todo.endpoints.requests.UpdateCheckedRequest;
 import com.pebblepost.todo.endpoints.requests.UpdateTextRequest;
+import com.pebblepost.todo.endpoints.responses.TodoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

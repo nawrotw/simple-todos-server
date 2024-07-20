@@ -1,4 +1,4 @@
-package com.pebblepost.todo.endpoints;
+package com.pebblepost.todo.endpoints.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pebblepost.todo.domain.Todo;

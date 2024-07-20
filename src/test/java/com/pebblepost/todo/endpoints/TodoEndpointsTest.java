@@ -59,7 +59,7 @@ class TodoEndpointsTest {
                 .andExpect(status().isCreated());
 
         List<Todo> todos = repo.findAll();
-        List<Todo> expected = List.of(new Todo(1L, "Buy some water", false));
+        List<Todo> expected = List.of(new Todo(1L, 0, "Buy some water", false));
         assertThat(todos).isEqualTo(expected);
     }
 
@@ -86,7 +86,7 @@ class TodoEndpointsTest {
 
     @Test
     void updateChecked() throws Exception {
-        repo.save(new Todo(1L, "Buy some water", false));
+        repo.save(new Todo("Buy some water", false));
 
         this.mockMvc.perform(put("/api/todos/1/checked")
                         .contentType(APPLICATION_JSON)
@@ -95,13 +95,13 @@ class TodoEndpointsTest {
                 .andExpect(status().isOk());
 
         List<Todo> todos = repo.findAll();
-        List<Todo> expected = List.of(new Todo(1L, "Buy some water", true));
+        List<Todo> expected = List.of(new Todo(1L, 1, "Buy some water", true));
         assertThat(todos).isEqualTo(expected);
     }
 
     @Test
     void updateText() throws Exception {
-        repo.save(new Todo(1L, "Buy some water", false));
+        repo.save(new Todo("Buy some water", false));
 
         this.mockMvc.perform(put("/api/todos/1/text")
                         .contentType(APPLICATION_JSON)
@@ -110,13 +110,13 @@ class TodoEndpointsTest {
                 .andExpect(status().isOk());
 
         List<Todo> todos = repo.findAll();
-        List<Todo> expected = List.of(new Todo(1L, "Buy some water, maybe 2", false));
+        List<Todo> expected = List.of(new Todo(1L, 1, "Buy some water, maybe 2", false));
         assertThat(todos).isEqualTo(expected);
     }
 
     @Test
     void deleteTodo() throws Exception {
-        repo.save(new Todo(1L, "Buy some water", false));
+        repo.save(new Todo("Buy some water", false));
 
         this.mockMvc.perform(delete("/api/todos/1"))
                 .andExpect(status().isOk());

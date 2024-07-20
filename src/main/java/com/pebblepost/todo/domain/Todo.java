@@ -18,8 +18,7 @@ public class Todo {
     private Long id;
 
     @Version
-    private int version; // optimistic updates - napisać test?
-
+    private int version; // optimistic updates - write a test
 
     @NotNull
     private String text;

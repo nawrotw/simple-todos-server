@@ -1,8 +1,6 @@
 package com.pebblepost.todo.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,17 +16,14 @@ public class Todo {
     private Long id;
 
     @Version
-    private int version; // optimistic updates - write a test
+    @Setter(AccessLevel.NONE)
+    private int version; // optimistic locking
 
     @NotNull
     private String text;
 
     @NotNull
     private Boolean checked;
-
-    public Todo(String text) {
-        this.text = text;
-    }
 
     public Todo(String text, boolean checked) {
         this.text = text;

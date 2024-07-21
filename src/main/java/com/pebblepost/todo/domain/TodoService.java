@@ -20,7 +20,7 @@ public class TodoService {
     }
 
     public List<Todo> getTodos() {
-        return todoRepository.findAll();
+        return todoRepository.findAllByOrderByCheckedAscTextAsc();
     }
 
     @Transactional

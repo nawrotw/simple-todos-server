@@ -1,16 +1,17 @@
 [
   {
-    "id": 1,
+    "id": 3,
+    "checked": false,
     "text":  "Buy some water"
+  },
+  {
+    "id": 1,
+    "checked": false,
+    "text": "Wax a chain"
   },
   {
     "id": 2,
     "checked": true,
     "text": "Clean a bike"
-  },
-  {
-    "id": 3,
-    "checked": false,
-    "text": "Wax a chain"
   }
 ]

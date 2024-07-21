@@ -67,15 +67,16 @@ class TodoEndpointsTest {
     @Test
     void getAll() throws Exception {
         List<Todo> newTodos = List.of(
-                new Todo("Buy some water", false),
+                new Todo("Wax a chain", false),
                 new Todo("Clean a bike", true),
-                new Todo("Wax a chain", false)
+                new Todo("Buy some water", false)
         );
 
         repo.saveAll(newTodos);
 
         this.mockMvc.perform(get("/api/todos"))
                 .andExpect(status().isOk())
+                // todos should be properly sorted: 1st by checked, 2nd by text
                 .andExpect(content().json(readJson(todosResponseJson)));
     }
 

@@ -20,6 +20,7 @@ public class Todo {
     private int version; // optimistic locking
 
     @NotNull
+    @Column(unique = true)
     private String text;
 
     @NotNull

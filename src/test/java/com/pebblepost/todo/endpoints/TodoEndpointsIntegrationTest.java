@@ -15,8 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -27,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
-class TodoEndpointsTest {
+class TodoEndpointsIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -62,6 +64,22 @@ class TodoEndpointsTest {
         List<Todo> todos = repo.findAll();
         List<Todo> expected = List.of(new Todo(1L, 0, "Buy some water", false));
         assertThat(todos).isEqualTo(expected);
+    }
+
+    @Test
+    void createDupes() throws Exception {
+        repo.save(new Todo("Buy some water", false));
+
+        // creating todo with same text should fail
+        this.mockMvc.perform(post("/api/todos")
+                        .contentType(APPLICATION_JSON)
+                        .content(readJson(createNewTodoRequestBody))
+                )
+                .andExpect(status().is4xxClientError())
+                .andExpect(result -> assertEquals(
+                        "409 CONFLICT \"'Buy some water' already exists\"",
+                        Objects.requireNonNull(result.getResolvedException()).getMessage())
+                );
     }
 
     @Test
@@ -139,5 +157,15 @@ class TodoEndpointsTest {
                 .andExpect(status().isOk());
 
         assertThat(repo.findAll().size()).isEqualTo(0);
+    }
+
+    @Test
+    void deleteTodoNotFound() throws Exception {
+        this.mockMvc.perform(delete("/api/todos/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> assertEquals(
+                        "404 NOT_FOUND \"Todo { id: '1' } not found\"",
+                        Objects.requireNonNull(result.getResolvedException()).getMessage())
+                );
     }
 }

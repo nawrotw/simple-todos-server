@@ -1,6 +1,8 @@
 package com.pebblepost.todo.domain;
 
-import com.pebblepost.todo.exceptions.ResponseNotFoundException;
+import com.pebblepost.todo.exceptions.DuplicatedTodoException;
+import com.pebblepost.todo.exceptions.TodoEntityNotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,6 +18,9 @@ public class TodoService {
     }
 
     public void createTodo(String text, boolean checked) {
+        todoRepository.findOneByText(text).ifPresent(todo -> {
+            throw new DuplicatedTodoException(text);
+        });
         todoRepository.save(new Todo(text, checked));
     }
 
@@ -25,7 +30,11 @@ public class TodoService {
 
     @Transactional
     public void deleteTodo(Long id) {
-        todoRepository.deleteById(id);
+        try {
+            todoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new TodoEntityNotFoundException(id);
+        }
     }
 
     @Transactional
@@ -44,8 +53,6 @@ public class TodoService {
     }
 
     private Todo getTodoById(Long id) {
-        return todoRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResponseNotFoundException("Todo { id: '" + id + "' } not found"));
+        return todoRepository.findById(id).orElseThrow(() -> new TodoEntityNotFoundException(id));
     }
 }

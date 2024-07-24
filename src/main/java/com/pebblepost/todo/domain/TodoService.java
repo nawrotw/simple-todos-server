@@ -39,20 +39,16 @@ public class TodoService {
 
     @Transactional
     public void updateChecked(Long id, boolean checked) {
-        getTodoById(id).setChecked(checked);
+        todoRepository.updateChecked(id, checked);
     }
 
     @Transactional
     public void updateText(Long id, String text) {
-        getTodoById(id).setText(text);
+        todoRepository.updateText(id, text);
     }
 
     @Transactional
     public void clearCompleted() {
-        todoRepository.findAll().forEach(todo -> todo.setChecked(false));
-    }
-
-    private Todo getTodoById(Long id) {
-        return todoRepository.findById(id).orElseThrow(() -> new TodoEntityNotFoundException(id));
+        todoRepository.clearCompleted();
     }
 }

@@ -114,8 +114,8 @@ class TodoEndpointsIntegrationTest {
         List<Todo> todos = repo.findAll();
         assertThat(todos).isEqualTo(List.of(
                 new Todo(1L, 0, "Buy some water", false),
-                new Todo(2L, 1, "Clean a bike", false),
-                new Todo(3L, 1, "Wax a chain", false)
+                new Todo(2L, 0, "Clean a bike", false),
+                new Todo(3L, 0, "Wax a chain", false)
         ));
     }
 
@@ -130,7 +130,7 @@ class TodoEndpointsIntegrationTest {
                 .andExpect(status().isOk());
 
         List<Todo> todos = repo.findAll();
-        List<Todo> expected = List.of(new Todo(1L, 1, "Buy some water", true));
+        List<Todo> expected = List.of(new Todo(1L, 0, "Buy some water", true));
         assertThat(todos).isEqualTo(expected);
     }
 
@@ -145,7 +145,7 @@ class TodoEndpointsIntegrationTest {
                 .andExpect(status().isOk());
 
         List<Todo> todos = repo.findAll();
-        List<Todo> expected = List.of(new Todo(1L, 1, "Buy some water, maybe 2", false));
+        List<Todo> expected = List.of(new Todo(1L, 0, "Buy some water, maybe 2", false));
         assertThat(todos).isEqualTo(expected);
     }
 
